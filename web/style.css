@@ -5,3 +5,17 @@
     box-sizing: border-box;
     font-family: 'Courier New', Courier, monospace;
 }
+:root
+{
+    --white: #fff;
+    --blue: #0e1538;
+}
+body
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: var(--blue);
+    color: var(--white);
+}
