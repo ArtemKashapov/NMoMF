@@ -7,9 +7,13 @@ eel.init('web')
 @eel.expose
 def run():
     current = State()
-    solution, theta_array, time_array = Implicits(current).solve()
+    if True: # TODO: Тумблер
+        scheme = Implicits(current)
+
+    solution, theta_array, time_array = scheme.solve()
     plotter = Graphics(solution, theta_array, time_array)
     plotter.plot_solution()
+    # plotter.plot_image() # пространственно-временной рисунок
 
 
 

@@ -16,7 +16,7 @@ class State:
         self.K = K
 
     def psi(self, theta):
-        return self.state.uc + np.cos(theta) ** 4
+        return self.uc + np.cos(theta) ** 4
 
 
 class Implicits:
@@ -41,15 +41,36 @@ class Implicits:
         self.eps[-1] = sigma
         self.gam[0] = sigma
 
+    def tri_diag_solver_right(self, a, c, b, f):
+        n = c.size
+        k = n - 1
+        alpha = np.zeros(k)
+        beta = np.zeros(k)
+        x = np.zeros(n)
+        
+        alpha[0] = - b[0] / c[0]
+        beta[0] = f[0] / c[0]
+        
+        for ind in range(1, k):
+            alpha[ind] = - b[ind] / (a[ind - 1] * alpha[ind - 1] + c[ind])
+            beta[ind] = (f[ind] - a[ind - 1] * beta[ind - 1]) / (a[ind - 1] * alpha[ind - 1] + c[ind])
+            
+        x[-1] = (f[-1] - a[-1] * beta[-1]) / (a[-1] * alpha[-1] + c[-1])
+        
+        for ind in range(n - 2, -1, -1):
+            x[ind] = alpha[ind] * x[ind + 1] + beta[ind]
+        return x
+
     def solve(self):
-        matrix = np.diag(self.beta) + np.diag(self.eps, -1) + np.diag(self.gam, 1)
+        # matrix = np.diag(self.beta) + np.diag(self.eps, -1) + np.diag(self.gam, 1) # для м. м.
 
         v = np.zeros([self.state.K + 1, self.state.I + 1])
         v[0, :] = self.state.psi(self.theta)
 
         for k_ind in range(1, self.state.K+1):
             eel.setProgress(round((1 - (self.state.K - k_ind + 1) / self.state.K) * 100, 0))
-            v[k_ind, :] = np.linalg.inv(matrix) @ v[k_ind - 1, :]
+            # v[k_ind, :] = np.linalg.inv(matrix) @ v[k_ind - 1, :] # матричный метод (медленный в 40 раз менее производительный)
+            v[k_ind, :] = self.tri_diag_solver_right(self.eps, self.beta, self.gam, v[k_ind - 1, :])
         return v, self.theta, self.t
 
 
@@ -77,4 +98,5 @@ class Graphics:
 
     def plot_image(self):
         f = plt.figure(figsize=[16, 9])
-        plt.imagesc()
+        plt.imshow(self.v)
+        plt.show()
