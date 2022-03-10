@@ -7,9 +7,11 @@ eel.init('web')
 @eel.expose
 def run():
     current = State()
-    if True: # TODO: Тумблер
+    print(eel.getScheme())
+    if eel.getScheme():
         scheme = Implicits(current)
-        # scheme = Explicits(current)
+    else:
+        scheme = Explicits(current)
 
     solution, theta_array, time_array = scheme.solve()
     plotter = Graphics(solution, theta_array, time_array)
