@@ -1,7 +1,7 @@
 btn = document.getElementById('calculate');
 scheme = document.getElementById('scheme-shooser')
 
-implicit = False
+implicitFlag = false
 
 btn.addEventListener('click', run);
 function run() {
@@ -17,6 +17,12 @@ function setProgress(progress) {
     progressVal.textContent = progress + "%"
 }
 
-// scheme.onchange = function() {
-//     eel.
-// }
+scheme.onchange = function() {
+    implicitFlag = !implicitFlag
+    console.log(implicitFlag)
+}
+
+eel.expose(getScheme)
+function getScheme() {
+    return implicitFlag
+}
