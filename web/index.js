@@ -1,5 +1,7 @@
 btn = document.getElementById('calculate');
+scheme = document.getElementById('scheme-shooser')
 
+implicit = False
 
 btn.addEventListener('click', run);
 function run() {
@@ -14,3 +16,7 @@ function setProgress(progress) {
     progressBar.setAttribute('style', "--i: " + progress + ";")
     progressVal.textContent = progress + "%"
 }
+
+// scheme.onchange = function() {
+//     eel.
+// }
