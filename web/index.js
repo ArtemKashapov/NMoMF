@@ -20,9 +20,14 @@ function setProgress(progress) {
 scheme.onchange = function() {
     implicitFlag = !implicitFlag
     console.log(implicitFlag)
+    // eel.change_scheme()
 }
 
 eel.expose(getScheme)
 function getScheme() {
-    return implicitFlag
+    if (implicitFlag) {
+        return '1'
+    } else {
+        return '0'
+    }
 }

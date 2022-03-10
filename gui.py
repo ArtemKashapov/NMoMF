@@ -3,12 +3,12 @@ from solver import State, Implicits, Explicits, Graphics
 
 
 eel.init('web')
+scheme_flag = False
 
 @eel.expose
 def run():
     current = State()
-    print(eel.getScheme())
-    if eel.getScheme():
+    if int(eel.getScheme()()):
         scheme = Implicits(current)
     else:
         scheme = Explicits(current)
@@ -17,7 +17,6 @@ def run():
     plotter = Graphics(solution, theta_array, time_array)
     plotter.plot_solution()
     # plotter.plot_image() # пространственно-временной рисунок
-
 
 
 if __name__=="__main__":
