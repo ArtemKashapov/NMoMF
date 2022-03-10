@@ -1,5 +1,5 @@
 import eel
-from solver import State, Implicits, Graphics
+from solver import State, Implicits, Explicits, Graphics
 
 
 eel.init('web')
@@ -8,7 +8,8 @@ eel.init('web')
 def run():
     current = State()
     if True: # TODO: Тумблер
-        scheme = Implicits(current)
+        # scheme = Implicits(current)
+        scheme = Explicits(current)
 
     solution, theta_array, time_array = scheme.solve()
     plotter = Graphics(solution, theta_array, time_array)

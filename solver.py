@@ -100,3 +100,29 @@ class Graphics:
         f = plt.figure(figsize=[16, 9])
         plt.imshow(self.v)
         plt.show()
+
+
+class Explicits:
+    def __init__(self, state) -> None:
+        self.state = state
+
+        self.t = np.linspace(0, self.state.T, self.state.I + 1)
+        self.theta = np.linspace(0.001, pi-0.001, self.state.K + 1)
+
+        self.h_t = self.t[2] - self.t[1]
+        self.h_theta = self.theta[2] - self.theta[1]
+
+        self.gam = 2*self.state.k*self.h_t / (self.state.R ** 2 * self.state.c * self.h_theta ** 2)
+        self.betta = - self.state.alpha * self.h_t / (self.state.l * self.state.c)
+        self.omega = self.state.k * self.h_t / (self.state.R ** 2 * np.tan(self.theta[:]))
+        self.eta = self.state.k * self.h_t / (self.state.R ** 2 * self.state.c * self.h_theta ** 2)
+
+
+    def solve(self):
+        v = np.zeros([self.state.K + 1, self.state.I + 1])
+        v[0, :] = self.state.psi(self.theta)
+
+        for k_ind in range(1, self.state.K+1):
+            v[k_ind, :] = (self.betta + 1 - 2 * self.eta) * v[k_ind - 1, :] + (self.omega + self.eta) * v[k_ind - 1, :] + (self.eta - self.omega) * v[k_ind - 1, :] - self.betta * self.state.uc
+
+        return v, self.theta, self.t
