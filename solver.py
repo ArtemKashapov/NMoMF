@@ -6,7 +6,7 @@ from math import gamma, pi
 
 
 class State:
-    def __init__(self, c=1.65, k=0.59, R=5, uc=0, l=0.5, alpha=0.003, T=40, I=1024, K=1024) -> None:
+    def __init__(self, c=1.65, k=0.59, R=5, uc=0, l=0.5, alpha=0.003, T=40, I=20, K=100) -> None:
         self.c = c
         self.k = k
         self.R = R
@@ -24,8 +24,8 @@ class State:
 class Implicits:
     def __init__(self, state) -> None:
         self.state = state
-        self.t = np.linspace(0, self.state.T, self.state.I + 1)
-        self.theta = np.linspace(0.001, pi-0.001, self.state.K + 1)
+        self.t = np.linspace(0, self.state.T, self.state.K + 1)
+        self.theta = np.linspace(0.001, pi-0.001, self.state.I + 1)
 
         self.h_t = self.t[2] - self.t[1]
         self.h_theta = self.theta[2] - self.theta[1]
@@ -86,7 +86,7 @@ class Graphics:
     def plot_solution(self):
         f = plt.figure(figsize=[16, 9])
         plt.plot(self.theta_array, self.v[0, :], lw=4, c='black', label='t=0')
-        for ind in [100, 400, 800, 1024]:
+        for ind in [20, 40 , 60, 80]:
             plt.plot(self.theta_array, self.v[ind, :], lw=4, label='t='+str(self.time_array[ind]))
 
         plt.xlim([self.theta_array[1], self.theta_array[-1]])
@@ -114,13 +114,11 @@ class Explicits:
         self.h_t = self.t[2] - self.t[1]
         self.h_theta = self.theta[2] - self.theta[1]
 
-        self.gam = 2*self.state.k*self.h_t / (self.state.R ** 2 * self.state.c * self.h_theta ** 2)
+        self.gam = self.state.k*self.h_t / (self.state.R ** 2 * self.state.c * self.h_theta ** 2)
         self.betta = - self.state.alpha * self.h_t / (self.state.l * self.state.c)
-        self.omega = self.state.k * self.h_t / (self.state.R ** 2 * np.tan(self.theta[:]))
-        self.eta = self.state.k * self.h_t / (self.state.R ** 2 * self.state.c * self.h_theta ** 2)
 
     def omega(self, i):
-        return self.state.k * self.h_t / (self.state.R ** 2 * np.tan(self.theta[i]))
+        return self.state.k * self.h_t / (self.state.R ** 2 * np.tan(self.theta[i]) * self.h_theta * self.state.c)
 
 
     def solve(self):
@@ -128,13 +126,13 @@ class Explicits:
         v[0, :] = self.state.psi(self.theta)
 
         for k_ind in range(1, self.state.K+1):
-            for i_ind in range(1, self.state.I):
+            for i_ind in range(0, self.state.I+1):
                 if i_ind == 0:
-                    v[k_ind, i_ind] = (1 + self.betta - 2*gamma) * v[k_ind - 1, i_ind] + self.gam * v[k_ind - 1, i_ind + 1]
-                elif i_ind == self.state.I+1:
-                    v[k_ind, i_ind] = (1 + self.betta - 2*gamma) * v[k_ind - 1, i_ind] + self.gam * v[k_ind - 1, i_ind - 1]
+                    v[k_ind, i_ind] = (1 + self.betta - 4*self.gam) * v[k_ind - 1, i_ind] + 2*self.gam * v[k_ind - 1, i_ind + 1]
+                elif i_ind == self.state.I:
+                    v[k_ind, i_ind] = (1 + self.betta - 4*self.gam) * v[k_ind - 1, i_ind] + 2*self.gam * v[k_ind - 1, i_ind - 1]
                 else:
-                    v[k_ind, i_ind] = (self.betta + 1 - 2* self.eta) * v[k_ind - 1, i_ind] + (self.omega(self, i_ind) + self.eta) * v[k_ind - 1, i_ind + 1] + (self.eta - self.omega(self, i_ind)) * v[k_ind - 1, i_ind - 1] - 2 * self.betta * self.state.uc / self.state.alpha
+                    v[k_ind, i_ind] = (self.betta + 1 + 2* self.gam) * v[k_ind - 1, i_ind] + (self.omega(i_ind) + self.gam) * v[k_ind - 1, i_ind + 1] + (self.gam - self.omega(i_ind)) * v[k_ind - 1, i_ind - 1]
 
         # for k_ind in range(1, self.state.K+1):
             # v[k_ind, :] = (self.betta + 1 - 2 * self.eta) * v[k_ind - 1, :] + (self.omega + self.eta) * v[k_ind - 1, :] + (self.eta - self.omega) * v[k_ind - 1, :] - self.betta * self.state.uc
