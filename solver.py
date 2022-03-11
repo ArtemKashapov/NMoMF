@@ -76,17 +76,18 @@ class Implicits:
         return v, self.theta, self.t
 
 
-class Graphics:
+class GFTool:
     def __init__(self, solution, theta_array, time_array) -> None:
         # solution - матрица, представляющая из себя решение
         self.v = solution
         self.theta_array = theta_array
         self.time_array = time_array
+        [self.K, self.I] = solution.shape
 
     def plot_solution(self):
-        f = plt.figure(figsize=[16, 9])
+        f = plt.figure(figsize=[12, 6])
         plt.plot(self.theta_array, self.v[0, :], lw=4, c='black', label='t=0')
-        for ind in [20, 40 , 60, 80]:
+        for ind in [int(self.K / 4), int(self.K / 2), int(self.K / 4 * 3), int(self.K - 1)]:
             plt.plot(self.theta_array, self.v[ind, :], lw=4, label='t='+str(self.time_array[ind]))
 
         plt.xlim([self.theta_array[1], self.theta_array[-1]])
@@ -99,7 +100,7 @@ class Graphics:
         plt.show()
 
     def plot_image(self):
-        f = plt.figure(figsize=[16, 9])
+        f = plt.figure(figsize=[4, 3])
         plt.imshow(self.v)
         plt.show()
 

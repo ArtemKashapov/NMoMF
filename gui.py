@@ -1,5 +1,5 @@
 import eel
-from solver import State, Implicits, Explicits, Graphics
+from solver import State, Implicits, Explicits, GFTool
 
 
 eel.init('web')
@@ -14,9 +14,9 @@ def run():
         scheme = Explicits(current)
 
     solution, theta_array, time_array = scheme.solve()
-    plotter = Graphics(solution, theta_array, time_array)
+    plotter = GFTool(solution, theta_array, time_array)
     plotter.plot_solution()
-    # plotter.plot_image() # пространственно-временной рисунок
+    plotter.plot_image() # пространственно-временной рисунок
 
 
 if __name__=="__main__":
