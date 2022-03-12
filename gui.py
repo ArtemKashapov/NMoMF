@@ -17,7 +17,7 @@ def run():
     plotter = GFTool(solution, theta_array, time_array)
     plotter.plot_solution()
     plotter.plot_image() # пространственно-временной рисунок
-
+    plotter.plot_evol()
 
 if __name__=="__main__":
     eel.start('index.html', port=8080)
