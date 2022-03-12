@@ -5,11 +5,7 @@ from math import pi
 
 
 class State:
-<<<<<<< HEAD
-    def __init__(self, c=1.65, k=0.59, R=5, uc=0, l=0.5, alpha=0.003, T=40, I=50, K=50*8) -> None:
-=======
     def __init__(self, c=1.65, k=0.59, R=5, uc=0, l=0.5, alpha=0.003, T=40, I=1024, K=1024) -> None:
->>>>>>> 0ac520df3138efb62ba0784a4240fc7f467335e0
         self.c = c
         self.k = k
         self.R = R
