@@ -1,5 +1,4 @@
-from random import randrange
-import re
+import random
 import numpy as np, matplotlib.pyplot as plt
 import eel
 from math import pi
@@ -102,6 +101,19 @@ class GFTool:
     def plot_image(self):
         f = plt.figure(figsize=[4, 3])
         plt.imshow(self.v)
+        plt.show()
+    
+    def plot_evol(self):
+        f = plt.figure(figsize=[12, 6])
+        ls_list = [':', '-', '--', '-']
+        plt.plot(self.time_array, self.v[:, 0], lw=4, c='black', label='$\\theta$=0')
+        for ind in [int(self.I / 4), int(self.I / 2), int(3 * self.I / 4), self.I - 1]:
+            plt.plot(self.time_array, self.v[:, ind], lw=4, ls=random.choice(ls_list), label='$\\theta$='+str(self.theta_array[ind]))
+        plt.xlim([self.time_array[1], self.time_array[-1]])
+        plt.xlabel('$t$', fontsize=20)
+        plt.ylabel('${v(t)}$', fontsize=20)
+        plt.legend()
+        plt.grid()
         plt.show()
 
 
