@@ -2,11 +2,11 @@ from random import randrange
 import re
 import numpy as np, matplotlib.pyplot as plt
 import eel
-from math import gamma, pi
+from math import pi
 
 
 class State:
-    def __init__(self, c=1.65, k=0.59, R=5, uc=0, l=0.5, alpha=0.003, T=40, I=20, K=100) -> None:
+    def __init__(self, c=1.65, k=0.59, R=5, uc=0, l=0.5, alpha=0.003, T=40, I=50, K=50*8) -> None:
         self.c = c
         self.k = k
         self.R = R
@@ -116,10 +116,10 @@ class Explicits:
         self.h_theta = self.theta[2] - self.theta[1]
 
         self.gam = self.state.k*self.h_t / (self.state.R ** 2 * self.state.c * self.h_theta ** 2)
-        self.betta = - self.state.alpha * self.h_t / (self.state.l * self.state.c)
+        self.beta = self.state.alpha * self.h_t / (self.state.l * self.state.c)
 
     def omega(self, i):
-        return self.state.k * self.h_t / (self.state.R ** 2 * np.tan(self.theta[i]) * self.h_theta * self.state.c)
+        return self.state.k * self.h_t / (2 * self.state.R ** 2 * np.tan(self.theta[i]) * self.h_theta * self.state.c)
 
 
     def solve(self):
@@ -129,13 +129,10 @@ class Explicits:
         for k_ind in range(1, self.state.K+1):
             for i_ind in range(0, self.state.I+1):
                 if i_ind == 0:
-                    v[k_ind, i_ind] = (1 + self.betta - 4*self.gam) * v[k_ind - 1, i_ind] + 2*self.gam * v[k_ind - 1, i_ind + 1]
+                    v[k_ind, i_ind] = (1 - self.beta - 4*self.gam) * v[k_ind - 1, i_ind] + 2*self.gam * v[k_ind - 1, i_ind + 1]
                 elif i_ind == self.state.I:
-                    v[k_ind, i_ind] = (1 + self.betta - 4*self.gam) * v[k_ind - 1, i_ind] + 2*self.gam * v[k_ind - 1, i_ind - 1]
+                    v[k_ind, i_ind] = (1 - self.beta - 4*self.gam) * v[k_ind - 1, i_ind] + 2*self.gam * v[k_ind - 1, i_ind - 1]
                 else:
-                    v[k_ind, i_ind] = (self.betta + 1 + 2* self.gam) * v[k_ind - 1, i_ind] + (self.omega(i_ind) + self.gam) * v[k_ind - 1, i_ind + 1] + (self.gam - self.omega(i_ind)) * v[k_ind - 1, i_ind - 1]
-
-        # for k_ind in range(1, self.state.K+1):
-            # v[k_ind, :] = (self.betta + 1 - 2 * self.eta) * v[k_ind - 1, :] + (self.omega + self.eta) * v[k_ind - 1, :] + (self.eta - self.omega) * v[k_ind - 1, :] - self.betta * self.state.uc
+                    v[k_ind, i_ind] = (1 - self.beta - 2* self.gam) * v[k_ind - 1, i_ind] + (self.omega(i_ind) + self.gam) * v[k_ind - 1, i_ind + 1] + (self.gam - self.omega(i_ind)) * v[k_ind - 1, i_ind - 1]
 
         return v, self.theta, self.t
