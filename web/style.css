@@ -11,6 +11,7 @@
     --blue: #0e1538;
     --lightblue: #8fa1ff;
     --grey: #353847;
+    --darkgrey: #17181d;
 }
 .container{
     padding: 10%;
@@ -26,12 +27,13 @@ body
     align-items: center;
     min-height: 100vh;
     background: var(--lightblue);
-    color: var(--white);
+    color: var(--darkgrey);
 }
 
 body.change
 {
     background: var(--blue);
+    color: var(--white);
 }
 
 /* SLIDER */
