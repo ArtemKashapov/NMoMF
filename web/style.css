@@ -9,11 +9,15 @@
 {
     --white: #fff;
     --blue: #0e1538;
+    --lightblue: #8fa1ff;
     --grey: #353847;
 }
 
 .container{
     padding: 10%;
+    position: relative;
+    justify-content: center;
+    align-items: center;
 }
 
 body
@@ -22,15 +26,18 @@ body
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: var(--blue);
+    background: var(--lightblue);
     color: var(--white);
 }
 
-.params
+body.change
+{
+    background: var(--blue);
+}
+
+/* .params
 {
     position: relative;
-    /* width: 20rem; */
-    /* height: 3rem;; */
 }
 
 .params__input
@@ -68,7 +75,7 @@ body
     top: -0.5rem;
     font-size: 0.8rem;
     left: 0.8rem;
-}
+} */
 
 
 /* SLIDER */
@@ -77,6 +84,15 @@ body
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
+}
+.scheme p:first-child
+{
+    padding-right: 10px;
+}
+.scheme p:last-child
+{
+    padding-left: 10px;
 }
 
 .switch 
@@ -256,4 +272,48 @@ input:checked + .slider:before {
 .footer .percent:hover .number h2
 {
     font-size: 1.5em;
+}
+
+.vars
+{
+    position: relative;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+    font-size: large;
+}
+
+.tight
+{
+    display: inline-flex;
+    align-items: center;
+    padding: 10px;
+}
+.tight p
+{
+    text-align: center;
+    vertical-align: middle;
+    padding-left: 70px;
+}
+.tight p:first-child
+{
+    padding-left: 13px;
+}
+.tight:last-child p
+{
+    padding-left: 15px;
+}
+.tight input
+{
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: large;
+    border-radius: 15px;
+}
+.tight:last-child input
+{
+    width: 60px;
 }

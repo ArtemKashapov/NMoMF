@@ -6,8 +6,16 @@ eel.init('web')
 scheme_flag = False
 
 @eel.expose
-def run():
-    current = State()
+def run(params):
+    I = int(params['I'])
+    K = int(params['K'])
+    l = float(params['l'])
+    T = float(params['T'])
+    c = float(params['c'])
+    k = float(params['k'])
+    R = float(params['R'])
+    alpha = float(params['alpha'])
+    current = State(c=c, k=k, R=R, l=l, alpha=alpha, T=T, I=I, K=K)
     if int(eel.getScheme()()):
         scheme = Implicits(current)
     else:

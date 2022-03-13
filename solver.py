@@ -5,7 +5,7 @@ from math import pi
 
 
 class State:
-    def __init__(self, c=1.65, k=0.59, R=5, uc=0, l=0.5, alpha=0.003, T=40, I=64, K=64*64) -> None:
+    def __init__(self, c=1.65, k=0.59, R=5, uc=0, l=0.5, alpha=0.003, T=40, I=512, K=64*512) -> None:
         self.c = c
         self.k = k
         self.R = R
